@@ -1,0 +1,290 @@
+\documentclass[12pt, A4]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[dvips]{graphicx}
+\usepackage{setspace}
+\usepackage{latexsym}
+\usepackage{epsf}
+\usepackage{epsfig}
+\usepackage{braket}
+\usepackage{slashed}
+\usepackage{amssymb}
+\usepackage{enumerate}
+%\usepackage[shortlabels]{enumitem}
+\usepackage{color}
+\usepackage{empheq}
+\usepackage{hyperref}
+\hypersetup{ hidelinks,}
+\usepackage{verbatim}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{stackengine}
+\usepackage{algorithm}
+\usepackage{mathtools}
+\usepackage{lscape}
+\usepackage{diagbox}
+\usepackage{xcolor,colortbl}
+%\usepackage{xcolor}
+%\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+%\usepackage{algpascal}
+\renewcommand{\thealgorithm}{}
+\algdef{SE}[SUBALG]{Indent}{EndIndent}{}{\algorithmicend\ }%
+\algtext*{Indent}
+\algtext*{EndIndent}
+\makeatletter
+\newcommand{\brokenline}[2][t]{\parbox[#1]{\dimexpr\linewidth-\ALG@thistlm}{\strut\raggedright #2\strut}}
+\makeatother
+
+\usepackage{multirow}
+\usepackage[space]{grffile}
+%\usepackage[demo]{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{claim}{Claim}
+\newtheorem{relation}{Relation}
+\newtheorem{argument}{Argument}
+\newtheorem{example}{Example}
+\newtheorem{puzzle}{Puzzle}
+\newtheorem{info}{Information}
+\newtheorem{note}{Note}
+
+\title{To Decompose or not to Decompose: A Comparison between Different Neural Networks and GBM models for Stock Prices Predictions} 
+\author{Hassan Saadi}
+
+\begin{document}
+	\date{}
+	\maketitle
+\begin{abstract}
+	In this work, $18$ stocks are considered to predict the adjusted closing price for the next $40$ trading days. The methods that were used to make predictions are: Long Short Term Memory (LSTM), Temporal Convolution Networks (TCN), decomposing the signal and applying different combinations of LSTM and TCN on the decomposed parts, and stochastic process-geometric Brownian motion. The historical data from Yahoo Finance from $2015$-$2018$ was used to build all the models. Finally, the output of each model is compared to the actual adjusted closing price of each stock. The results show that applying a TCN yielded on average the best results and it has the smallest number of parameters among all neural networks models. However, decomposition with a trend, seasonality, and noise compoenents of a time series yielded the best results for some stocks. 
+
+\end{abstract}
+
+\section{Introduction}
+Forecasting the stock prices accurately is a task that many companies are trying to solve and optimize on a daily basis. In the last few decades, the field of machine learning has been developing rapidly and the usage of neural networks is becoming more popular because of their success in modeling complex functions. Some types of neural networks are suited for certain tasks. For example, LSTM and TCN neural networks are good for sequences; hence, they are good for time series predictions; and convolution neural networks (CNN) are good for images. Moreover, I decomposed the time series into three components: trend, seasonality, and residual. \\
+
+Stochastic modeling is an alternative method to model a system, and it's different from a neural network approach. In finance, many people believe that the stock prices follow a geometric Brownian motion (GBM) behavior. That's to say, the returns of stock between two consecutive points in time are normally distributed and independent from each other. In this model the drift and volatility are constant, and are estimated from historical data. This assumption doesn't match in real-world time series, but future work can incorporate time dependent estimations for these parameters.\\
+
+
+
+To the the best of our knowledge, the literature does not contain a comparison study between LSTM, TCN, decomposed time series with LSTM and TCN, and GBM. We decided to perform these experiments on $18$ stocks, and predict the adjusted closing price for the next $40$ trading days in order to assess the performance of TCN and the decomposition idea. In this work, section $2$ has a short literature review and related work. In section $3$, has the methodology. In section $4$ is the experimental setup. In section $5$, the results of all the models. And finally, in section $6$ conclusion and future work.
+
+\section{Short literature review and related work}
+
+In \cite{hiransha2018nse} work, they compared four types of neural networks (RNN,LSTM,CNN, and MLP) to predict two stock markets price. In \cite{gao2020application} work, they also compared LSTM, CNN, MLP, and one attention-based neural network to predict the next day's index price from three different financial markets. The attention-based model performed the best in their experiments. Another group created a new neural architecture to deal with the temporal structure that a time series has by inventing Temporal Convolution Network (TCN)  \cite{lea2017temporal}. 
+
+\section{Methodology}
+\subsection{LSTM}
+Our first model is an LSTM. The formulation of LSTM is as follows
+\begin{eqnarray}
+	\mathbf{i}_{t} &=& \sigma_{g}( \mathbf{W}_{i}\mathbf{x}_{t} + \mathbf{U}_{i}\mathbf{h}_{t-1} + \mathbf{b}_{i} ) \\
+	\mathbf{f}_{t} &=& \sigma_{g}( \mathbf{W}_{f}\mathbf{x}_{t} + \mathbf{U}_{f}\mathbf{h}_{t-1} + \mathbf{b}_{f}  ) \\
+	\tilde{\mathbf{c}}_{t} &=& \sigma_{c}( \mathbf{W}_{c}\mathbf{x}_{t} + \mathbf{U}_{c}\mathbf{h}_{t-1} + \mathbf{b}_{c}  ) \\
+	\mathbf{c}_{t} &=& \mathbf{f}_{t}\mathbf{c}_{t-1} + \mathbf{i}_{t} \odot i_{t} \odot 	\tilde{\mathbf{c}}_{t} \\
+	\mathbf{o}_{t} &=& \sigma_{g}(\mathbf{W}_{o}\mathbf{x}_{t} + \mathbf{U}_{o}\mathbf{h}_{t-1} + \mathbf{b}_{o} )
+\end{eqnarray}
+
+where $\odot$ means element-wise multiplication, $\sigma_{g}$ is the logistic sigmoid function, $\sigma_{c}$ is the hyperbolic tangent function, and  $\sigma_{h}$ is the hyperbolic tangent function which are used as recurrent activation functions. LSTM architecture has memory cells to store and output information. This property aids a recurrent neural network to find long-range temporal dependencies. $\mathbf{i}$, $\mathbf{f}$, $\mathbf{c}$, and $\mathbf{o}$ are the input gate, forget gate, cell activation, and output gate respectively. The LSTM system is captured in this equation
+\begin{equation}
+	\mathbf{h}_{t} = LSTM(\mathbf{x}_{t}, \mathbf{h}_{t-1}) = \mathbf{o}_{t} \cdot \sigma_{h}(\mathbf{c}_{t})
+\end{equation}
+
+\subsection{TCN}
+TCN has two main ideas: The convolutions are causal, i.e., no information is leaked from future to past; and the architecture can have a sequence of any length as input and map it to an output sequence that has the same length. The first idea is accomplished by making convolutions where an output at time $t$ is convolved only with elements from time $t$ and in the past in the previous layer. The second idea is accomplished by utilizing a $1D$ fully convolutional network architecture such that each hidden layer has the same size as the input layer. Dilated convolutions are also used here to enable a larger receptive field to capture dependencies at larger scales. For an input sequence $\mathbf{x} \in \mathbb{R}^{n}$ and a filter $h: \{0,...,k-1\} \rightarrow \mathbb{R}$, the dilated convolutional operation $F$ on element $s$ on the sequence is
+\begin{equation}
+	F(s) = (\mathbf{x} \ast_{d} h)(s) = \sum_{i=0}^{k-1}h(i)\cdot \mathbf{x}_{s-d\cdot i}
+\end{equation}
+where $d$ is the dilation factor, $k$ is the size of the filter, and $s-d\cdot i$ captures the direction in the past. \\
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm,height=6cm]{TCN}
+	\caption{A dilated Causal convolution with dilation factors $d=1,2,4$ and filter size $k=3$ \cite{bai2018empirical}.}
+	\label{TCN_arch}
+\end{figure}
+
+\subsection{Decomposition}
+A time series can be decomposed into three parts: trend, seasonality, and residual. In this work, the "$stat\_decompose$`` library in python was used in order to the decomposition. Note that, the trend is obtained by performed moving average. After decomposition, I applied different combinations of LSTM(s) and TCN(s) to these components. In total, there is $8$ models that incorporate decomposition: (L,L,L), (L,L,T), (L,T,L), (L,T,T), (T,L,L), (T,L,T), (T,T,L), and (T,T,T); where $L$ and $T$ mean LSTM  and TCN were used respectively;, and the first, second, and third entries in each model correspond to trend, seasonality, and residual part of the time series respectively. So for example, (L,L,T) model means that two LSTMs are used to model trend and seasonality separately and one TCN is use to model the residual. \\
+
+\subsection{GBM}
+
+A Wiener process (Brownian Motion) is a Markov stochastic process with zero drift and variance rate of one; $dW = \epsilon \sqrt{dt}$ where $\epsilon$ is sampled from a normal distribution. It has the following properties:
+\begin{enumerate}
+	\item $W_{0}=0$
+	\item $W_{s+t}-W_{t} \in \mathcal{N}(0,s)$ for $0\leq s\leq t \leq T$
+	\item $\{W_{t}\}_{t\geq 0}$ has stationary and independent non-overlapping increments. 
+\end{enumerate}
+ 
+A generalized Wiener process has a drift term and has the form $dX(t) = \mu dt + \sigma dW(t)$.
+If the stochastic process is defined as $X(t)= \log(S(t))$ because the prices are assumed to follow a lognormal distribution since prices can't be negative, then we obtain the geometric Brownian motion as
+\begin{equation}
+	\frac{dS(t)}{S(t)} = \mu dt + \sigma dW(t) \label{GBM_diff}
+\end{equation}
+This can be solved for $t>0$ by integrating both sides as
+\begin{equation}
+	S(t) = S(0) + \mu \int_{0}^{t}S(\tau) d\tau + \sigma \int_{0}^{t} S(\tau)dW(\tau) \label{integrate_SDE}
+\end{equation}
+By using Ito's formula we obtain
+\begin{equation}
+	d\log(S(t)) = (\mu - \frac{\sigma^{2}}{2})dt + \sigma dW(t)
+\end{equation}
+Hence, after integrating both sides
+\begin{equation}
+	S(t) = S(0) e^{(\mu-\frac{1}{2}\sigma^{2})t +\sigma W(t)} = S(0)e^{X(t)}
+\end{equation}
+Since we are working with discrete data, we can make progressive predictions from time $t_{0}$ incrementally as $t_{0}<t_{1}<t_{2}<...<t_{N}$ by generating $N$ iid $\mathcal{N}(0,1)$ random variables $z_{1},...,z_{N}$. Note that this can be done because for any $0\leq s <t$ we have $S(t)= S(0) \frac{S(s)}{S(0)}\frac{S(t)}{S(s)}= S(0)e^{X(s)}\times e^{X(s)-X(t)}$, and we already know that $X(s)$ is independent of the increment $X(t)-X(s)$; hence, $\frac{S(s)}{S(0)}$ and $\frac{S(t)}{S(s)}$ are independent lognormals. Generalizing the idea, let $Y_{i}= \frac{S_{t_{i}}}{S(t_{i-1})}$, we have $S(t_{k})= S(t_{k-1})Y_{k} = S_{0} Y_{1}Y_{2}...Y_{k}$, with $Y_{i} = e^{\sigma z_{i} + \mu}$ because $t_{i}-t_{i-1}=1$ in our case because we are interested in the daily adjusted price of a stock. Therefore, we obtain
+\begin{eqnarray}
+	S_{t_k} &=& S_{0} \prod_{i=1}^{k} e^{\mu - \frac{1}{2}\sigma^{2} + \sigma z_{i} } \nonumber \\
+	&=& S_{0} e^{ (\mu - \frac{1}{2}\sigma^{2})k + \sigma \sum_{i=1}^{k} z_{i} } \nonumber \\
+	&=& S_{0} e^{ (\mu - \frac{1}{2}\sigma^{2})t_{k} + \sigma W_{k} }
+\end{eqnarray}
+where we replaced $k$ with $t_{k}$, and $W_{k} = \sum_{i=1}^{k}z_{i}$.
+
+\section{Experimental Section}
+
+\subsection{Datasets}
+ All experiments are performed on $18$ stocks from the S$\&$P $500$ list: Apple (AAPL), IBM (IBM), Tesla Inc. (TSLA), Microsoft Corp. (MSFT), Facebook (FB), Google Inc. (GOOGL), Procter $\&$ Gamble (PG), JPMorgan Chase $\&$ Co. (JPM), Netflix Inc. (NFLX), Intel Corp. (INTC), PayPal (PYPL), Adobe Inc. (ADBE), Johnson $\&$ Johnson (JNJ), Goldman Sachs Group (GS), Hewlett Packard Enterprise (HPE), Morgan Stanley (MS), (NDAQ), General Motors (GM). The historical data was taken from Yahoo Finance from $2015$-$2018$, and the goal is to predict the adjusted close price for the next $40$ trading days; i.e. the months of January and February of $2019$. 
+
+\subsection{Evaluation Metrics}
+Two metrics are adopted in this study, $RMSE$ and $MAE$:
+\begin{eqnarray}
+	RMSE &=& \sqrt{\frac{\sum_{i=1}^{N}(x_{i} - \hat{x}_{i})^{2} }{N} } \label{RMSE} \\
+	MAE &=& \frac{\sum_{i=1}^{N} |x_{i} - \hat{x}_{i}| }{N} \label{MAE}
+\end{eqnarray}
+where $x_{i}$ is the true value, $\hat{x}_{i}$ is the predicted value, $N$ is the total number of test data points. 
+
+\subsection{Hyperparameters}
+
+If only one LSTM is used for all stocks, then its properties are: One layer, $300$ neurons, $100$ epochs, $64$ batch size, time step of $10$, mean squared error loss, and adam optimizer. The number of trainable parameters is $362701$. \\
+
+In all experiments, the TCNs properties are: filter size of $2$, $100$ epochs, time step $10$, dilations of $\{1,2,4,8\}$,mean squared error loss, and adam optimizer.  The number of trainable parameters is $87937$. \\
+
+If an LSTM is used on the decomposed components then its properties are: One layer, $100$ neurons, $100$ epochs, $64$ batch size, time step of $10$, mean squared error loss, and adam optimizer. The number of trainable parameters is $40901$.  Note that the number of neurons in this LSTM is one-third of the LSTM described earlier. 
+
+\subsection{Machine Specs}
+All experiments were run on a laptop with 1.6 GHz Dual-Core Intel Core i5 and $8$GB of main memory.
+
+\section{Results}
+
+In table (\ref{Average RMSE_MAE_results}), the average RMSE and MAE over all $18$ stocks, and the number of stocks that each model predicted the best according to RMSE and MAE are listed. The best model is shown in bold and colored with blue.
+\begin{table}[H]
+	\footnotesize
+	\begin{center}
+		\begin{tabular}{| c | c | c | c | c | c |}
+			\hline 
+			Model & $\stackrel{Number\; of}{Parameters}$ & $Avg.\; RMSE$ & $Avg.\; MAE$ & $Best \;RMSE$ & $Best\; MAE$ \\ \cline{1-6}
+			LSTM & $362701$& $3.70$ & $3.00$  &\cellcolor{blue!25}  \boldmath{$6$} & $4$ \\ \cline{1-6}
+			TCN & \cellcolor{blue!25}  \boldmath{$87937$}&\cellcolor{blue!25}   \boldmath{$3.49$} &\cellcolor{blue!25}   \boldmath{$2.79$} & $5$ & \cellcolor{blue!25}  \boldmath{$6$}  \\ \cline{1-6}
+			GBM & $0$ &$11.98$ & $10.83$ & $0$ & $0$ \\ \cline{1-6}
+			(L,L,L)& $122703$ & $4.46$ & $3.66$ & $0$ & $0$  \\ \cline{1-6}
+			(L,L,T) & $169739$ & $4.91$ & $4.04$  & $0$ & $0$ \\ \cline{1-6}
+			(L,T,L) &  $169739$ & $4.46$ & $3.66$  & $1$ & $2$ \\ \cline{1-6}
+			(L,T,T) & $216775$ & $4.91$ & $4.04$  & $0$ & $0$ \\ \cline{1-6}
+			(T,L,L) & $169739$ & $3.66$ & $2.99$  & $5$ & $5$ \\ \cline{1-6}
+			(T,L,T) & $216775$ & $3.95$ & $3.19$  & $0$ & $0$ \\ \cline{1-6}
+			(T,T,L) & $216775$ & $3.66$ & $3.00$  & $1$ & $1$ \\ \cline{1-6}
+			(T,T,T) & $263811$ & $3.95$ & $3.19$  & $0$ & $0$ \\ \cline{1-6}			
+		\end{tabular}
+		\caption{Average RMSE and MAE for $18$ stocks} \label{Average RMSE_MAE_results}
+	\end{center}
+\end{table}
+
+The best models are TCN, LSTM, (T,L,L), (L,T,L), and (T,T,L).
+
+The heat map of RMSE for each stock is listed. The GBM model in this heat map was removed because of its high RMSE and MAE values. In the heat maps, green means low values of z-score, and red means high values of z-score. The tables (\ref{stocks RMSE_results}) and (\ref{stocks MAE_results}) of the RMSE and MAE for each stock is listed at the appendix were the best model is shown in bold and colored with blue.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=15cm,height=11cm]{RMSE_heatmap}
+	\caption{RMSE values with Z-score colors per row for $18$ stocks and all models excluding GBM.}
+	\label{RMSE_heatmap}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=15cm,height=11cm]{MAE_heatmap}
+	\caption{MAE values with Z-score colors per row for $18$ stocks and all models excluding GBM.}
+	\label{MAE_heatmap}
+\end{figure}
+
+\section{Conclusion and Future Work}
+In this work, we compared multiple neural network architectures with and without decomposition and a simple GBM model. TCN, (T,L,L), and LSTM have the best results overall in a decreasing order on $18$ stocks to predict the adjusted closing price for the next $40$ trading days. As future work, one can investigate different methods to improve the performance of these results and study their generalization capabilities. This can be done through building ensembles of these models and using other ways of decomposing the time series such as singular spectrum analysis.  Moreover, it would informative to investigate the relationship between time series properties and neural network architectures and decomposition methods.
+
+\bibliographystyle{IEEEtran}
+\bibliography{./references}
+
+\clearpage
+
+\section{Appendix}
+
+\begin{landscape}
+	\begin{table}[H]
+		%\footnotesize
+		\begin{center}
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |}
+				\hline 
+				\diagbox[width=2cm]{Stock}{Model} & LSTM & TCN & GBM & (L,L,L) & (L,L,T) & (L,T,L) & (L,T,T) & (T,L,L) & (T,L,T) & (T,T,L) & (T,T,T) \\ \cline{1-12}
+				AAPL & \cellcolor{blue!25}  \boldmath{$0.99$} & $1.78$ & $2.31$ & $1.19$ & $1.45$ & $1.19$ & $1.46$ & $1.99$ & $2.18$ & $1.99$ & $2.18$\\ \cline{1-12}
+				IBM & \cellcolor{blue!25}  \boldmath{$1.98$} & $2.98$ & $16.4$ & $1.99$ & $3.22$ & $1.98$ & $3.22$ & $2.06$ & $2.21$ & $2.06$ & $2.21$\\ \cline{1-12}
+				TSLA & $2.61$ & $4.38$ & $3.75$ & $2.37$ & $2.82$ & $2.37$ & $2.82$ & \cellcolor{blue!25}  \boldmath{$2.19$} & $2.52$ & $2.19$ & $2.52$\\ \cline{1-12}
+				MSFT &\cellcolor{blue!25}   \boldmath{$1.84$} & $1.86$ & $3.63$ & $2.97$ & $3.90$ & $2.97$ & $3.90$ & $4.48$ & $5.43$ & $4.47$ & $5.43$\\ \cline{1-12}
+				FB & $4.54$ &\cellcolor{blue!25}   \boldmath{$3.78$} & $19.8$ & $4.52$ & $5.20$ & $4.51$ & $5.17$ & $4.37$ & $4.24$ & $4.41$ & $4.26$\\ \cline{1-12}
+				GOOGL & $19.7$ & \cellcolor{blue!25}  \boldmath{$17.2$} & $34.7$ & $19.7$ & $19.1$ & $19.7$ & $19.1$ & $21.3$ & $20.4$ & $21.3$ & $20.4$\\ \cline{1-12}
+				PG & \cellcolor{blue!25}  \boldmath{$1.16$} & $3.33$ & $5.22$ & $1.43$ & $1.57$ & $1.43$ & $1.57$ & $2.86$ & $2.95$ & $2.86$ & $2.95$\\ \cline{1-12}
+				JPM & $1.20$ & $1.46$ & $3.25$ & $1.14$ & $1.27$ &\cellcolor{blue!25}   \boldmath{$1.14$} & $1.27$ & $1.44$ & $1.43$ & $1.44$ & $1.43$\\ \cline{1-12}
+				NFLX & $10.9$ & \cellcolor{blue!25}  \boldmath{$9.59$} & $63.3$ & $20.8$ & $20.9$ & $20.8$ & $20.9$ & $11.9$ & $12.6$ & $11.9$ & $12.6$\\ \cline{1-12}
+				INTC & $1.09$ & $0.95$ & $2.52$ & $1.36$ & $1.43$ & $1.36$ & $1.43$ & $0.8013$ & $0.89$ & \cellcolor{blue!25}  \boldmath{$0.8010$} & $0.89$\\ \cline{1-12}
+				PYPL & \cellcolor{blue!25}  \boldmath{$1.99$} & $2.32$ & $4.73$ & $3.92$ & $4.35$ & $3.91$ & $4.35$ & $2.12$ & $2.70$ & $2.12$ & $2.70$\\ \cline{1-12}
+				ADBE & $13.6$ & $4.69$ & $19.0$ & $10.5$ & $13.1$ & $10.5$ & $13.0$ &\cellcolor{blue!25}   \boldmath{$3.44$} & $4.57$ & $3.45$ & $4.57$\\ \cline{1-12}
+				JNJ & $1.50$ &\cellcolor{blue!25}   \boldmath{$1.15$} & $3.91$ & $1.19$ & $2.11$ & $1.19$ & $2.11$ & $1.25$ & $2.30$ & $1.25$ & $2.30$\\ \cline{1-12}
+				GS & $4.00$ & $3.58$ & $21.0$ & $4.24$ & $4.76$ & $4.24$ & $4.76$ & \cellcolor{blue!25}  \boldmath{$3.276$} & $3.79$ & $3.277$ & $3.80$\\ \cline{1-12}
+				HPE & \cellcolor{blue!25}  \boldmath{$0.1975$} & $0.1979$ & $1.70$ & $0.23$ & $0.23$ & $0.23$ & $0.23$ & $0.29$ & $0.27$ & $0.28$ & $0.27$\\ \cline{1-12}
+				MS & $0.69$ & $1.20$ & $1.65$ & $0.87$ & $1.01$ & $0.87$ & $1.01$ & \cellcolor{blue!25}  \boldmath{$0.656$} & $0.8420$ & $0.657$ & $0.8425$\\ \cline{1-12}
+				NDAQ & $0.95$ & $3.32$ & $4.16$ & $1.16$ & $1.07$ & $1.16$ & $1.07$ &\cellcolor{blue!25}   \boldmath{$0.82132$} & $0.88$ & $0.82133$ & $0.88$\\ \cline{1-12}
+				GM & $0.62$ &\cellcolor{blue!25}  \boldmath{$0.573$} & $4.37$ & $0.62$ & $0.73$ & $0.62$ & $0.73$ & $0.578$ & $0.71$ & $0.578$ & $0.71$\\ \cline{1-12}	
+			\end{tabular}
+			\caption{RMSE for $18$ stocks} \label{stocks RMSE_results}
+		\end{center}
+	\end{table}
+\end{landscape}
+
+\begin{landscape}
+	\begin{table}[H]
+		\begin{center}
+			%\footnotesize
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |}
+				\hline 
+				\diagbox[width=2cm]{Stock}{Model} & LSTM & TCN & GBM & (L,L,L) & (L,L,T) & (L,T,L) & (L,T,T) & (T,L,L) & (T,L,T) & (T,T,L) & (T,T,T) \\ \cline{1-12}
+				AAPL & \cellcolor{blue!25}  \boldmath{$0.66$} & $1.66$ & $2.10$ & $0.90$ & $1.16$ & $0.90$ & $1.16$ & $1.88$ & $2.01$ & $1.88$ & $2.01$\\ \cline{1-12}
+				IBM & $1.38$ & $1.97$ & $14.5$ & $1.43$ & $2.68$ & $1.43$ & $2.68$ & \cellcolor{blue!25}  \boldmath{$1.365$} & $1.61$ & $1.366$ & $1.60$\\ \cline{1-12}
+				TSLA & $1.75$ & $3.79$ & $3.13$ & $1.77$ & $2.05$ & $1.77$ & $2.05$ & \cellcolor{blue!25}  \boldmath{$1.68$} & $1.81$ & $1.69$ & $1.81$\\ \cline{1-12}
+				MSFT & $1.56$ &\cellcolor{blue!25}   \boldmath{$1.53$} & $3.00$ & $2.71$ & $3.55$ & $2.70$ & $3.55$ & $4.21$ & $5.15$ & $4.21$ & $5.15$\\ \cline{1-12}
+				FB & $3.46$ &\cellcolor{blue!25}   \boldmath{$2.52$} & $17.2$ & $3.36$ & $3.89$ & $3.36$ & $3.87$ & $3.54$ & $3.27$ & $3.60$ & $3.31$\\ \cline{1-12}
+				GOOGL & $16.3$ & \cellcolor{blue!25}  \boldmath{$13.4$} & $30.5$ & $15.4$ & $14.8$ & $15.4$ & $14.8$ & $17.6$ & $16.9$ & $17.6$ & $16.8$\\ \cline{1-12}
+				PG &\cellcolor{blue!25}  \boldmath{$0.96$} & $2.95$ & $4.17$ & $1.08$ & $1.26$ & $1.08$ & $1.26$ & $2.63$ & $2.71$ & $2.63$ & $2.71$\\ \cline{1-12}
+				JPM & $0.95$ & $1.25$ & $2.97$ & $0.84$ & $0.97$ &\cellcolor{blue!25}  \boldmath{$0.84$} & $0.97$ & $1.23$ & $1.16$ & $1.23$ & $1.16$\\ \cline{1-12}
+				NFLX & $7.98$ & \cellcolor{blue!25}  \boldmath{$7.32$} & $60.8$ & $17.5$ & $17.4$ & $17.4$ & $17.4$ & $9.39$ & $10.2$ & $9.39$ & $10.2$\\ \cline{1-12}
+				INTC & $0.78$ & $0.73$ & $1.97$ & $1.23$ & $1.24$ & $1.23$ & $1.24$ & $0.63$ & $0.74$ & \cellcolor{blue!25}  \boldmath{$0.62$} & $0.74$\\ \cline{1-12}
+				PYPL & \cellcolor{blue!25} \boldmath{$1.73$} & $2.09$ & $4.31$ & $3.63$ & $3.95$ & $3.63$ & $3.95$ & $1.77$ & $2.01$ & $1.77$ & $2.01$\\ \cline{1-12}
+				ADBE & $13.1$ & $3.81$ & $17.3$ & $10.0$ & $12.7$ & $10.0$ & $12.7$ &\cellcolor{blue!25}   \boldmath{$2.552$} & $3.30$ & $2.555$ & $3.29$\\ \cline{1-12}
+				JNJ & $1.21$ & $0.94$ & $3.09$ & $0.89008$ & $1.30$ & \cellcolor{blue!25}  \boldmath{$0.89001$} & $1.30$ & $1.03$ & $1.59$ & $1.03$ & $1.59$\\ \cline{1-12}
+				GS & $2.76$ & \cellcolor{blue!25} \boldmath{$2.49$} & $19.0$ & $2.85$ & $3.21$ & $2.85$ & $3.21$ & $2.57$ & $2.83$ & $2.58$ & $2.83$\\ \cline{1-12}
+				HPE & \cellcolor{blue!25} \boldmath{$0.14$} & $0.15$ & $1.51$ & $0.18$ & $0.18$ & $0.18$ & $0.18$ & $0.23$ & $0.20$ & $0.23$ & $0.20$\\ \cline{1-12}
+				MS & $0.56$ & $1.05$ & $1.49$ & $0.69$ & $0.83$ & $0.69$ & $0.83$ &\cellcolor{blue!25}  \boldmath{$0.5214$} & $0.69$ & $0.5218$ & $0.70$\\ \cline{1-12}
+				NDAQ & $0.78$ & $3.19$ & $3.57$ & $0.86$ & $0.85$ & $0.86$ & $0.85$ & \cellcolor{blue!25} \boldmath{$0.621164$} & $0.68$ & $0.621167$ & $0.68$\\ \cline{1-12}
+				GM & $0.48$ & \cellcolor{blue!25} \boldmath{$0.41$} & $4.05$ & $0.45$ & $0.51$ & $0.45$ & $0.51$ & $0.42$ & $0.54$ & $0.42$ & $0.54$\\ \cline{1-12}
+			\end{tabular}
+			\caption{MAE for $18$ stocks} \label{stocks MAE_results}
+		\end{center}
+	\end{table}
+\end{landscape}
+
+
+\end{document}
