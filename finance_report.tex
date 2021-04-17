@@ -87,7 +87,7 @@ Our first model is an LSTM. The formulation of LSTM is as follows
 	\mathbf{i}_{t} &=& \sigma_{g}( \mathbf{W}_{i}\mathbf{x}_{t} + \mathbf{U}_{i}\mathbf{h}_{t-1} + \mathbf{b}_{i} ) \\
 	\mathbf{f}_{t} &=& \sigma_{g}( \mathbf{W}_{f}\mathbf{x}_{t} + \mathbf{U}_{f}\mathbf{h}_{t-1} + \mathbf{b}_{f}  ) \\
 	\tilde{\mathbf{c}}_{t} &=& \sigma_{c}( \mathbf{W}_{c}\mathbf{x}_{t} + \mathbf{U}_{c}\mathbf{h}_{t-1} + \mathbf{b}_{c}  ) \\
-	\mathbf{c}_{t} &=& \mathbf{f}_{t}\mathbf{c}_{t-1} + \mathbf{i}_{t} \odot i_{t} \odot 	\tilde{\mathbf{c}}_{t} \\
+	\mathbf{c}_{t} &=& \mathbf{f}_{t}\mathbf{c}_{t-1} + \mathbf{i}_{t} \odot \tilde{\mathbf{c}}_{t} \\
 	\mathbf{o}_{t} &=& \sigma_{g}(\mathbf{W}_{o}\mathbf{x}_{t} + \mathbf{U}_{o}\mathbf{h}_{t-1} + \mathbf{b}_{o} )
 \end{eqnarray}
 
