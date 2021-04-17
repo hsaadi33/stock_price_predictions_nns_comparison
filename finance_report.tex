@@ -88,13 +88,11 @@ Our first model is an LSTM. The formulation of LSTM is as follows
 	\mathbf{f}_{t} &=& \sigma_{g}( \mathbf{W}_{f}\mathbf{x}_{t} + \mathbf{U}_{f}\mathbf{h}_{t-1} + \mathbf{b}_{f}  ) \\
 	\tilde{\mathbf{c}}_{t} &=& \sigma_{c}( \mathbf{W}_{c}\mathbf{x}_{t} + \mathbf{U}_{c}\mathbf{h}_{t-1} + \mathbf{b}_{c}  ) \\
 	\mathbf{c}_{t} &=& \mathbf{f}_{t}\mathbf{c}_{t-1} + \mathbf{i}_{t} \odot \tilde{\mathbf{c}}_{t} \\
-	\mathbf{o}_{t} &=& \sigma_{g}(\mathbf{W}_{o}\mathbf{x}_{t} + \mathbf{U}_{o}\mathbf{h}_{t-1} + \mathbf{b}_{o} )
+	\mathbf{o}_{t} &=& \sigma_{g}(\mathbf{W}_{o}\mathbf{x}_{t} + \mathbf{U}_{o}\mathbf{h}_{t-1} + \mathbf{b}_{o} ) \\
+	\mathbf{h}_{t} &=& LSTM(\mathbf{x}_{t}, \mathbf{h}_{t-1}) = \mathbf{o}_{t} \odot \sigma_{h}(\mathbf{c}_{t})
 \end{eqnarray}
 
-where $\odot$ means element-wise multiplication, $\sigma_{g}$ is the logistic sigmoid function, $\sigma_{c}$ is the hyperbolic tangent function, and  $\sigma_{h}$ is the hyperbolic tangent function which are used as recurrent activation functions. LSTM architecture has memory cells to store and output information. This property aids a recurrent neural network to find long-range temporal dependencies. $\mathbf{i}$, $\mathbf{f}$, $\mathbf{c}$, and $\mathbf{o}$ are the input gate, forget gate, cell activation, and output gate respectively. The LSTM system is captured in this equation
-\begin{equation}
-	\mathbf{h}_{t} = LSTM(\mathbf{x}_{t}, \mathbf{h}_{t-1}) = \mathbf{o}_{t} \cdot \sigma_{h}(\mathbf{c}_{t})
-\end{equation}
+where $\odot$ means element-wise multiplication, $\sigma_{g}$ is the logistic sigmoid function, $\sigma_{c}$ is the hyperbolic tangent function, and  $\sigma_{h}$ is the hyperbolic tangent function which are used as recurrent activation functions. LSTM architecture has memory cells to store and output information. This property aids a recurrent neural network to find long-range temporal dependencies. $\mathbf{i}$, $\mathbf{f}$, $\mathbf{c}$, and $\mathbf{o}$ are the input gate, forget gate, cell activation, and output gate respectively.
 
 \subsection{TCN}
 TCN has two main ideas: The convolutions are causal, i.e., no information is leaked from future to past; and the architecture can have a sequence of any length as input and map it to an output sequence that has the same length. The first idea is accomplished by making convolutions where an output at time $t$ is convolved only with elements from time $t$ and in the past in the previous layer. The second idea is accomplished by utilizing a $1D$ fully convolutional network architecture such that each hidden layer has the same size as the input layer. Dilated convolutions are also used here to enable a larger receptive field to capture dependencies at larger scales. For an input sequence $\mathbf{x} \in \mathbb{R}^{n}$ and a filter $h: \{0,...,k-1\} \rightarrow \mathbb{R}$, the dilated convolutional operation $F$ on element $s$ on the sequence is
