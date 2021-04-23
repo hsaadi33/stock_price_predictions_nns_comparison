@@ -14,7 +14,7 @@ def decompose(df):
 
 	res = sm.tsa.seasonal_decompose(df2, model="additive",period = 10)
 
-	#Moving average in trend method doesn't produce values for the first and last 5 elements
+	#Moving average in trend method doesn't produce values for the first and last 5 elements (convolution filter)
 	trend = res.trend[5:-5].to_frame().reset_index()
 	trend = trend.rename(columns={"trend": "Adj Close"})
 	seasonal = res.seasonal[5:-5].to_frame().reset_index()
