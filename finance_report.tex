@@ -68,18 +68,17 @@
 \end{abstract}
 
 \section{Introduction}
-Forecasting the stock prices accurately is a task that many companies are trying to solve and optimize on a daily basis. In the last few decades, the field of machine learning has been developing rapidly and the usage of neural networks is becoming more popular because of their success in modeling complex functions. Some types of neural networks are suited for certain tasks. For example, LSTM and TCN neural networks are good for sequences; hence, they are good for time series predictions; and convolution neural networks (CNN) are good for images. Moreover, I decomposed the time series into three components: trend, seasonality, and residual. \\
+Forecasting the stock prices accurately is a task that many companies are trying to solve and optimize on a daily basis. In the last few decades, the field of machine learning has been developing rapidly and the usage of neural networks is becoming more popular because of their success in modeling complex functions. Some types of neural networks are suited for certain tasks. For example, LSTM and TCN neural networks are good for sequences; hence, they are good for time series predictions; and convolution neural networks (CNN) are good for images. We also decomposed the time series into three components: trend, seasonality, and residual in order to study the impact of this decomposition on the performance.  \\
 
 Stochastic modeling is an alternative method to model a system, and it's different from a neural network approach. In finance, many people believe that the stock prices follow a geometric Brownian motion (GBM) behavior. That's to say, the returns of stock between two consecutive points in time are normally distributed and independent from each other. In this model the drift and volatility are constant, and are estimated from historical data. This assumption doesn't match in real-world time series, but future work can incorporate time dependent estimations for these parameters.\\
 
-
+In this work, we didn't consider autoregressive models like ARIMA because the authors of this work \cite{siami2018comparison} showed the superiority of LSTMs in predicting the adjusted closing prices where the dataset was large. Moreover, the prediction period in our work is $40$ trading days which we considered to be not a small window of predictions, and we have $1000$ training points which is not a small dataset, so a neural network can have a chance to learn it. ARIMA can be a good model if the time series is stationary or can be made stationary. But if the time series cannot be made stationary trivially, then using ARIMA models becomes not ideal. Stationarity is not required for neural networks because they can learn non-linear relationships. \\
 
 To the the best of our knowledge, the literature does not contain a comparison study between LSTM, TCN, decomposed time series with LSTM and TCN, and GBM. We decided to perform these experiments on $18$ stocks, and predict the adjusted closing price for the next $40$ trading days in order to assess the performance of TCN and the decomposition idea. In this work, section $2$ has a short literature review and related work. In section $3$, has the methodology. In section $4$ is the experimental setup. In section $5$, the results of all the models. And finally, in section $6$ conclusion and future work.
 
 \section{Short literature review and related work}
 
 In \cite{hiransha2018nse} work, they compared four types of neural networks (RNN,LSTM,CNN, and MLP) to predict two stock markets price. In \cite{gao2020application} work, they also compared LSTM, CNN, MLP, and one attention-based neural network to predict the next day's index price from three different financial markets. The attention-based model performed the best in their experiments. Another group created a new neural architecture to deal with the temporal structure that a time series has by inventing Temporal Convolution Network (TCN)  \cite{lea2017temporal}. 
-
 \section{Methodology}
 \subsection{LSTM}
 Our first model is an LSTM. The formulation of LSTM is as follows
