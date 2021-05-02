@@ -17,7 +17,7 @@ from sklearn.metrics import mean_absolute_error
 import math
 import stat_decompose
 
-stocks = ["AAPL", "IBM", "TSLA", "MSFT", "FB", "GOOGL", "PG", "JPM", "NFLX", "INTC", "PYPL", "ADBE", "JNJ", "GS", "HPE", "MS", "NDAQ", "GM"]
+stocks = ["AAPL", "IBM", "TSLA", "MSFT", "FB", "GOOGL", "PG", "JPM", "NFLX", "INTC", "ADBE", "JNJ", "GS", "MS", "NDAQ", "GM"]
 #stocks = ["AAPL"]
 
 adj_close = dict()
@@ -25,13 +25,10 @@ results_lstm = dict()
 results_tcn = dict()
 results_e = dict()
 
+
 start_training_year = 2015
 start_training_month = 1
-start_training_day = 9
-
-start_training_year2 = 2015
-start_training_month2 = 1
-start_training_day2 = 2
+start_training_day = 2
 
 end_training_year = 2018
 end_training_month = 12
@@ -51,7 +48,6 @@ end_training_date = "{}-{:02d}-{:02d}".format(end_training_year,end_training_mon
 start_test_date = "{}-{:02d}-{:02d}".format(start_test_year,start_test_month,start_test_day)
 end_test_date = "{}-{:02d}-{:02d}".format(end_test_year,end_test_month,end_test_day)
 
-start_training_date2 = "{}-{:02d}-{:02d}".format(start_training_year2,start_training_month2,start_training_day2)
 
 time_step = 10
 
@@ -66,7 +62,7 @@ resid_tcn = dict()
 y_test = dict()
 
 for stock in stocks:
-	adj_close[stock] = pd.read_csv("data2/{}.csv".format(stock)).drop(["High", "Low", "Volume","Open","Close"], axis=1)
+	adj_close[stock] = pd.read_csv("data3/{}.csv".format(stock)).drop(["High", "Low", "Volume","Open","Close"], axis=1)
 	adj_close_trend, adj_close_seasonal, adj_close_resid = stat_decompose.decompose(adj_close[stock])
 
 
@@ -120,16 +116,19 @@ for stock in stocks:
 		end_test_date)[-1]))	
 		
 	F = adj_close[stock]
-	mask = (F['Date'] >= start_training_date2) & (F['Date'] <= end_training_date)
-	training_size = int(len(F.loc[mask]))
+	mask = (F['Date'] >= start_training_date) & (F['Date'] <= end_training_date)
+	training_size = int(len(F.loc[mask])) + 10 #moving average of 10
 	F = F["Adj Close"]
 	F_series = pd.Series(F)
-	y_test[stock] = list(F_series[training_size:len(F_series)-5])
+	y_test[stock] = list(F_series[training_size:len(F_series)])
+	
 
 
 
 
-with open('decomp3_results_pred40_days.csv','w', newline='') as file:
+
+
+with open('decomp3_results_pred40_days_2.csv','w', newline='') as file:
 	writer = csv.writer(file)
 	writer.writerow(["Stocks", "lstm_trend", "lstm_seasonal", "lstm_resid", "tcn_trend","tcn_seasonal","tcn_resid","y_test"])
 	for stock in stocks:

@@ -10,7 +10,7 @@ from sklearn.metrics import mean_absolute_error
 import math
 import csv
 
-stocks = ["AAPL", "IBM", "TSLA", "MSFT", "FB", "GOOGL", "PG", "JPM", "NFLX", "INTC", "PYPL", "ADBE", "JNJ", "GS", "HPE", "MS", "NDAQ", "GM"]
+stocks = ["AAPL", "IBM", "TSLA", "MSFT", "FB", "GOOGL", "PG", "JPM", "NFLX", "INTC", "ADBE", "JNJ", "GS", "MS", "NDAQ", "GM"]
 
 
 adj_close = dict()
@@ -61,7 +61,7 @@ for stock in stocks:
 	MAE[stock] = mean_absolute_error(S_test,results_GBM[stock])
 
 
-with open('GBM_results_lookback_100K_18stocks.csv','w', newline='') as file:
+with open('GBM_results_lookback_100K_16stocks_2.csv','w', newline='') as file:
 	writer = csv.writer(file)
 	writer.writerow(["Stocks", "RMSE test", "MAE test"])
 	for stock in stocks:

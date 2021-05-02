@@ -11,7 +11,7 @@ import TCN
 import csv
 import datetime as dt 
 
-stocks = ["AAPL", "IBM", "TSLA", "MSFT", "FB", "GOOGL", "PG", "JPM", "NFLX", "INTC", "PYPL", "ADBE", "JNJ", "GS", "HPE", "MS", "NDAQ", "GM"]
+stocks = ["AAPL", "IBM", "TSLA", "MSFT", "FB", "GOOGL", "PG", "JPM", "NFLX", "INTC", "ADBE", "JNJ", "GS", "MS", "NDAQ", "GM"]
 
 adj_close = dict()
 results_lstm = dict()
