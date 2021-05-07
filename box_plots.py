@@ -43,16 +43,18 @@ MAE["GBM"] = list(pd.read_csv("GBM_results_lookback_100K_16stocks_2.csv")["MAE t
 
 
 
-#labels, data = [*zip(*RMSE.items())]  # 'transpose' items to parallel key, value lists
-labels, data = [*zip(*MAE.items())]  # 'transpose' items to parallel key, value lists
+labels, data = [*zip(*RMSE.items())]  # 'transpose' items to parallel key, value lists
+#labels, data = [*zip(*MAE.items())]  # 'transpose' items to parallel key, value lists
 
 ax = sns.boxplot(data=data, width=.18, showmeans=True,meanprops={"marker": "o", "markeredgecolor": "yellow","markersize": "5"})
 plt.xticks(range(0, len(labels)), labels)
 #plt.xticks(plt.xticks()[0], list(RMSE.keys()))
 #plt.title("RMSE")
 ax.set_xlabel("Model")
-#ax.set_ylabel("RMSE")
-ax.set_ylabel("MAE")
-plt.grid()
+ax.set_ylabel("RMSE")
+#ax.set_ylabel("MAE")
+plt.grid(b=True, which='major')
+plt.grid(b=True, which='minor')
+plt.minorticks_on()
 
 plt.show()
