@@ -13,6 +13,7 @@ In this project there are 9 files:
 9. compare_results.py prints the best models that predicted a certain stock and the average RMSE and MAE.
 10. box_plots.py creates boxplots for each model for RMSE and MAE values
 11. create_heatmap.py creates heatmaps for each model for RMSE and MAE values
+12. normality_testing_RMSE_MAE.py tests for every model if the RMSE or MAE values are normally distributed
 
 
 

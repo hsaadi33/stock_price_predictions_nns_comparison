@@ -11,6 +11,8 @@ import csv
 import seaborn as sns
 from scipy import stats
 import operator as op
+from scipy.stats import kstest, norm
+from scipy import stats
 
 stocks = ["AAPL", "IBM", "TSLA", "MSFT", "FB", "GOOGL", "PG", "JPM", "NFLX", "INTC", "ADBE", "JNJ", "GS", "MS", "NDAQ", "GM"]
 models = ["lll","llt","ltl","ltt","tll","tlt","ttl","ttt"]
@@ -41,20 +43,23 @@ RMSE["GBM"] = list(pd.read_csv("GBM_results_lookback_100K_16stocks_2.csv")["RMSE
 MAE["GBM"] = list(pd.read_csv("GBM_results_lookback_100K_16stocks_2.csv")["MAE test"].to_numpy())
 
 
+print("KS Normality tests for RMSE values")
+for key in list(RMSE.keys()):
+	ks_statistic, p_value = kstest(RMSE[key], 'norm')
+	print(ks_statistic, p_value)
+
+print("KS Normality tests for MAE values")
+for key in list(MAE.keys()):
+	ks_statistic, p_value = kstest(MAE[key], 'norm')
+	print(ks_statistic, p_value)
+
+print("Shapiro Normality tests for RMSE values")
+for key in list(RMSE.keys()):
+	print(stats.shapiro(RMSE[key]))
 
 
-#labels, data = [*zip(*RMSE.items())]  # 'transpose' items to parallel key, value lists
-labels, data = [*zip(*MAE.items())]  # 'transpose' items to parallel key, value lists
+print("Shapiro Normality tests for MAE values")
+for key in list(MAE.keys()):
+	print(stats.shapiro(MAE[key]))
 
-ax = sns.boxplot(data=data, width=.18, showmeans=True,meanprops={"marker": "o", "markeredgecolor": "yellow","markersize": "5"}, showfliers = False)
-plt.xticks(range(0, len(labels)), labels)
-#plt.xticks(plt.xticks()[0], list(RMSE.keys()))
-#plt.title("RMSE")
-ax.set_xlabel("Model")
-#ax.set_ylabel("RMSE")
-ax.set_ylabel("MAE")
-plt.grid(b=True, which='major')
-plt.grid(b=True, which='minor')
-plt.minorticks_on()
 
-plt.show()
