@@ -25,34 +25,34 @@ decomp_models_mae = pd.read_csv("decomp3_results_pred40_days_MAE_2.csv").set_ind
 RMSE = dict()
 MAE = dict()
 
-RMSE["lstm"] = list(pd.read_csv("lstm_results_300_pred40_days_2.csv")["RMSE test"].to_numpy())
-MAE["lstm"] = list(pd.read_csv("lstm_results_300_pred40_days_2.csv")["MAE test"].to_numpy())
+RMSE["lstm"] = list(pd.read_csv("lstm_results_300_pred40_days_2.csv")["RMSE test"])
+MAE["lstm"] = list(pd.read_csv("lstm_results_300_pred40_days_2.csv")["MAE test"])
 
-RMSE["tcn"] = list(pd.read_csv("tcn_results_10_timestep_pred40_days_2.csv")["RMSE test"].to_numpy())
-MAE["tcn"] = list(pd.read_csv("tcn_results_10_timestep_pred40_days_2.csv")["MAE test"].to_numpy())
+RMSE["tcn"] = list(pd.read_csv("tcn_results_10_timestep_pred40_days_2.csv")["RMSE test"])
+MAE["tcn"] = list(pd.read_csv("tcn_results_10_timestep_pred40_days_2.csv")["MAE test"])
 
 for model in models:
-	RMSE[model] = list(pd.read_csv("decomp3_results_pred40_days_RMSE_2.csv")[model].to_numpy())
-	MAE[model] = list(pd.read_csv("decomp3_results_pred40_days_MAE_2.csv")[model].to_numpy())
+	RMSE[model] = list(pd.read_csv("decomp3_results_pred40_days_RMSE_2.csv")[model])
+	MAE[model] = list(pd.read_csv("decomp3_results_pred40_days_MAE_2.csv")[model])
 
 
 
-RMSE["GBM"] = list(pd.read_csv("GBM_results_lookback_100K_16stocks_2.csv")["RMSE test"].to_numpy())
-MAE["GBM"] = list(pd.read_csv("GBM_results_lookback_100K_16stocks_2.csv")["MAE test"].to_numpy())
+RMSE["GBM"] = list(pd.read_csv("GBM_results_lookback_100K_16stocks_2.csv")["RMSE test"])
+MAE["GBM"] = list(pd.read_csv("GBM_results_lookback_100K_16stocks_2.csv")["MAE test"])
 
 
 
 
-#labels, data = [*zip(*RMSE.items())]  # 'transpose' items to parallel key, value lists
-labels, data = [*zip(*MAE.items())]  # 'transpose' items to parallel key, value lists
+labels, data = [*zip(*RMSE.items())]  # 'transpose' items to parallel key, value lists
+#labels, data = [*zip(*MAE.items())]  # 'transpose' items to parallel key, value lists
 
-ax = sns.boxplot(data=data, width=.18, showmeans=True,meanprops={"marker": "o", "markeredgecolor": "yellow","markersize": "5"}, showfliers = False)
+ax = sns.boxplot(data=data, width=.18, showmeans=True,meanprops={"marker": "o", "markeredgecolor": "yellow","markersize": "5"}, whis=[0,100])
 plt.xticks(range(0, len(labels)), labels)
 #plt.xticks(plt.xticks()[0], list(RMSE.keys()))
 #plt.title("RMSE")
 ax.set_xlabel("Model")
-#ax.set_ylabel("RMSE")
-ax.set_ylabel("MAE")
+ax.set_ylabel("RMSE")
+#ax.set_ylabel("MAE")
 plt.grid(b=True, which='major')
 plt.grid(b=True, which='minor')
 plt.minorticks_on()
