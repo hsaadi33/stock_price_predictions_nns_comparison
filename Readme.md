@@ -11,6 +11,8 @@ In this project there are 9 files:
 7. testing_decomp3.py writes the predictions of the eight decomposition models in csv files.
 8. RMSE_MAE_decompose.py collects the predictions from the csv files that were produced from testing_decomp3, and compares them with the real data.
 9. compare_results.py prints the best models that predicted a certain stock and the average RMSE and MAE.
+10. box_plots.py creates boxplots for each model for RMSE and MAE values
+11. create_heatmap.py creates heatmaps for each model for RMSE and MAE values
 
 
 

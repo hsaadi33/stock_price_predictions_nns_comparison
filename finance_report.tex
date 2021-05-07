@@ -176,7 +176,7 @@ In table (\ref{Average RMSE_MAE_results}), the average RMSE and MAE over all $16
 	\begin{center}
 		\begin{tabular}{| c | c | c | c | c | c |}
 			\hline 
-			Model & $\stackrel{Number\; of}{Parameters}$ & $Avg.\; RMSE$ & $Avg.\; MAE$ & $Best \;RMSE$ & $Best\; MAE$ \\ \cline{1-6}
+			Model & $\stackrel{Number\; of}{Parameters}$ & $Avg.\; RMSE$ & $Avg.\; MAE$ & $\stackrel{number\; of}{best\; RMSE}$ & $\stackrel{number \; of}{best\; MAE}$ \\ \cline{1-6}
 			LSTM & $362701$& $4.22$ & $3.425$  &\cellcolor{blue!25}  \boldmath{$8$} & $6$ \\ \cline{1-6}
 			TCN & \cellcolor{blue!25}  \boldmath{$87937$}&\cellcolor{blue!25}   \boldmath{$3.86$} &\cellcolor{blue!25}   \boldmath{$3.07$} & \cellcolor{blue!25} \boldmath{$8$} & \cellcolor{blue!25}  \boldmath{$9$}  \\ \cline{1-6}
 			GBM & $0$ &$13.06$ & $11.80$ & $0$ & $0$ \\ \cline{1-6}
@@ -193,7 +193,22 @@ In table (\ref{Average RMSE_MAE_results}), the average RMSE and MAE over all $16
 	\end{center}
 \end{table}
 
-The best models are TCN, LSTM, (T,T,T) in order.
+The best models are TCN, LSTM, (T,T,T) in order. Below are boxplots for the RMSE and MAE values of each model where the mean of each model is shown as a green full circle.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=13cm,height=9cm]{RMSE_boxplot}
+	\caption{RMSE values for each model}
+	\label{RMSE_boxplot}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=13cm,height=9cm]{MAE_boxplot}
+	\caption{MAE values for each model}
+	\label{MAE_boxplot}
+\end{figure}
+
 
 The heat map of RMSE for each stock is listed. The GBM model in this heat map was removed because of its high RMSE and MAE values. In the heat maps, green means low values of z-score, and red means high values of z-score. The tables (\ref{stocks RMSE_results}) and (\ref{stocks MAE_results}) of the RMSE and MAE for each stock is listed at the appendix were the best model is shown in bold and colored with blue.
 
