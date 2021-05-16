@@ -193,7 +193,7 @@ In table (\ref{Average RMSE_MAE_results}), the average RMSE and MAE over all $16
 	\end{center}
 \end{table}
 
-The best models are TCN, LSTM, (T,T,T) in order. Below are boxplots for the RMSE and MAE values of each model where the mean of each model is shown as a green full circle. The boxplots are without outliers since we only have $16$ stocks, and they don't exhibit normality as we can see from the boxplots and after performing QQ plots, Kolmogorov-Smirnov, and Shapiro tests. Hence, the whiskers in the boxplots represent the minimum and maximum values of the dataset (model) range and not the $1.5$ IQR.
+The best models are TCN, LSTM, (T,T,T) in order. Below are boxplots for the RMSE and MAE values of each model where the mean of each model is shown as a green full circle. The data contains $16$ stocks, and doesn't exhibit normality as we can see from the boxplots and after performing QQ plots, Kolmogorov-Smirnov, and Shapiro tests. The whiskers in the boxplots represent the minimum and maximum values of the dataset (model) range and not the $1.5$ IQR; i.e., we are not showing outliers.
 
 \begin{figure}[H]
 	\centering
