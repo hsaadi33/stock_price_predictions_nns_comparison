@@ -21,24 +21,24 @@ stocks = ["AAPL", "IBM", "TSLA", "MSFT", "FB", "GOOGL", "PG", "JPM", "NFLX", "IN
 models = ["lll","llt","ltl","ltt","tll","tlt","ttl","ttt"]
 all_models = ["LSTM", "TCN", "LLL","LLT","LTL","LTT","TLL","TLT","TTL","TTT"]
 
-lstm_model = pd.read_csv("lstm_results_300_pred40_days_2.csv").set_index("Stocks")
-tcn_model = pd.read_csv("tcn_results_10_timestep_pred40_days_2.csv").set_index("Stocks")
+lstm_model = pd.read_csv("lstm_results_300_pred40_days_new.csv").set_index("Stocks")
+tcn_model = pd.read_csv("tcn_results_10_timestep_pred40_days_new.csv").set_index("Stocks")
 
-decomp_models_rmse = pd.read_csv("decomp3_results_pred40_days_RMSE_2.csv").set_index("Stocks")
-decomp_models_mae = pd.read_csv("decomp3_results_pred40_days_MAE_2.csv").set_index("Stocks")
+decomp_models_rmse = pd.read_csv("decomp3_results_pred40_days_RMSE_2_new.csv").set_index("Stocks")
+decomp_models_mae = pd.read_csv("decomp3_results_pred40_days_MAE_2_new.csv").set_index("Stocks")
 
 RMSE = dict()
 MAE = dict()
 
-RMSE["lstm"] = pd.read_csv("lstm_results_300_pred40_days_2.csv")["RMSE test"]
-MAE["lstm"] = pd.read_csv("lstm_results_300_pred40_days_2.csv")["MAE test"]
+RMSE["lstm"] = pd.read_csv("lstm_results_300_pred40_days_new.csv")["RMSE test"]
+MAE["lstm"] = pd.read_csv("lstm_results_300_pred40_days_new.csv")["MAE test"]
 
-RMSE["tcn"] = pd.read_csv("tcn_results_10_timestep_pred40_days_2.csv")["RMSE test"]
-MAE["tcn"] = pd.read_csv("tcn_results_10_timestep_pred40_days_2.csv")["MAE test"]
+RMSE["tcn"] = pd.read_csv("tcn_results_10_timestep_pred40_days_new.csv")["RMSE test"]
+MAE["tcn"] = pd.read_csv("tcn_results_10_timestep_pred40_days_new.csv")["MAE test"]
 
 for model in models:
-	RMSE[model] = pd.read_csv("decomp3_results_pred40_days_RMSE_2.csv")[model]
-	MAE[model] = pd.read_csv("decomp3_results_pred40_days_MAE_2.csv")[model]
+	RMSE[model] = pd.read_csv("decomp3_results_pred40_days_RMSE_2_new.csv")[model]
+	MAE[model] = pd.read_csv("decomp3_results_pred40_days_MAE_2_new.csv")[model]
 
 
 

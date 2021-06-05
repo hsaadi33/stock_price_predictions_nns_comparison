@@ -5,8 +5,8 @@ import numpy as np
 from numpy import pi
 import matplotlib.pyplot as plt
 import pandas as pd
-import LSTM
-import TCN
+import new_LSTM
+import new_TCN
 import csv
 
 RMSE = dict()
@@ -14,11 +14,11 @@ MAE = dict()
 stocks = ["AAPL", "IBM", "TSLA", "MSFT", "FB", "GOOGL", "PG", "JPM", "NFLX", "INTC", "ADBE", "JNJ", "GS", "MS", "NDAQ", "GM"]
 models = ["lll","llt","ltl","ltt","tll","tlt","ttl","ttt"]
 
-df1 = pd.read_csv("lstm_results_300_pred40_days_2.csv").set_index("Stocks")
-df2 = pd.read_csv("tcn_results_10_timestep_pred40_days_2.csv").set_index("Stocks")
+df1 = pd.read_csv("lstm_results_300_pred40_days_new.csv").set_index("Stocks")
+df2 = pd.read_csv("tcn_results_10_timestep_pred40_days_new.csv").set_index("Stocks")
 
-rmse_df = pd.read_csv("decomp3_results_pred40_days_RMSE_2.csv").set_index("Stocks")
-mae_df = pd.read_csv("decomp3_results_pred40_days_MAE_2.csv").set_index("Stocks")
+rmse_df = pd.read_csv("decomp3_results_pred40_days_RMSE_2_new.csv").set_index("Stocks")
+mae_df = pd.read_csv("decomp3_results_pred40_days_MAE_2_new.csv").set_index("Stocks")
 
 
 for stock in stocks:
@@ -132,14 +132,14 @@ RMSE2 = dict()
 MAE2 = dict()
 
 for model in models:
-	RMSE2[model] = np.mean(pd.read_csv("decomp3_results_pred40_days_RMSE_2.csv")[model].to_numpy())
-	MAE2[model] = np.mean(pd.read_csv("decomp3_results_pred40_days_MAE_2.csv")[model].to_numpy())
+	RMSE2[model] = np.mean(pd.read_csv("decomp3_results_pred40_days_RMSE_2_new.csv")[model].to_numpy())
+	MAE2[model] = np.mean(pd.read_csv("decomp3_results_pred40_days_MAE_2_new.csv")[model].to_numpy())
 
-RMSE2["lstm"] = np.mean(pd.read_csv("lstm_results_300_pred40_days_2.csv")["RMSE test"].to_numpy())
-MAE2["lstm"] = np.mean(pd.read_csv("lstm_results_300_pred40_days_2.csv")["MAE test"].to_numpy())
+RMSE2["lstm"] = np.mean(pd.read_csv("lstm_results_300_pred40_days_new.csv")["RMSE test"].to_numpy())
+MAE2["lstm"] = np.mean(pd.read_csv("lstm_results_300_pred40_days_new.csv")["MAE test"].to_numpy())
 
-RMSE2["tcn"] = np.mean(pd.read_csv("tcn_results_10_timestep_pred40_days_2.csv")["RMSE test"].to_numpy())
-MAE2["tcn"] = np.mean(pd.read_csv("tcn_results_10_timestep_pred40_days_2.csv")["MAE test"].to_numpy())
+RMSE2["tcn"] = np.mean(pd.read_csv("tcn_results_10_timestep_pred40_days_new.csv")["RMSE test"].to_numpy())
+MAE2["tcn"] = np.mean(pd.read_csv("tcn_results_10_timestep_pred40_days_new.csv")["MAE test"].to_numpy())
 
 RMSE2["GBM"] = np.mean(pd.read_csv("GBM_results_lookback_100K_16stocks_2.csv")["RMSE test"].to_numpy())
 MAE2["GBM"] = np.mean(pd.read_csv("GBM_results_lookback_100K_16stocks_2.csv")["MAE test"].to_numpy())

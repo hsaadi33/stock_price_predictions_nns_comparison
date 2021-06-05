@@ -19,7 +19,7 @@ MAE = dict()
 stocks = ["AAPL", "IBM", "TSLA", "MSFT", "FB", "GOOGL", "PG", "JPM", "NFLX", "INTC", "ADBE", "JNJ", "GS", "MS", "NDAQ", "GM"]
 models = dict()
 
-df = pd.read_csv("decomp3_results_pred40_days_2.csv").set_index("Stocks")
+df = pd.read_csv("decomp3_results_pred40_days_2_new.csv").set_index("Stocks")
 
 for stock in stocks:
 	df["lstm_trend"][stock] = ast.literal_eval(df["lstm_trend"][stock])
@@ -56,13 +56,13 @@ for stock in stocks:
 					mean_absolute_error(test[stock],models["ttl"][stock]), mean_absolute_error(test[stock],models["ttt"][stock]) ]
 
 
-with open('decomp3_results_pred40_days_RMSE_2.csv','w', newline='') as file:
+with open('decomp3_results_pred40_days_RMSE_2_new.csv','w', newline='') as file:
 	writer = csv.writer(file)
 	writer.writerow(["Stocks", "lll", "llt", "ltl", "ltt","tll","tlt","ttl","ttt"])
 	for stock in stocks:
 		writer.writerow([stock, RMSE[stock][0],RMSE[stock][1], RMSE[stock][2], RMSE[stock][3],RMSE[stock][4],RMSE[stock][5],RMSE[stock][6],RMSE[stock][7]])
 
-with open('decomp3_results_pred40_days_MAE_2.csv','w', newline='') as file:
+with open('decomp3_results_pred40_days_MAE_2_new.csv','w', newline='') as file:
 	writer = csv.writer(file)
 	writer.writerow(["Stocks", "lll", "llt", "ltl", "ltt","tll","tlt","ttl","ttt"])
 	for stock in stocks:

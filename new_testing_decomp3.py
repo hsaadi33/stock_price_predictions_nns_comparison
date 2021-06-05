@@ -6,8 +6,8 @@ import numpy as np
 from numpy import pi
 import matplotlib.pyplot as plt
 import pandas as pd
-import LSTM
-import TCN
+import new_LSTM
+import new_TCN
 import csv
 import datetime as dt
 import statsmodels.api as sm
@@ -30,9 +30,10 @@ start_training_year = 2015
 start_training_month = 1
 start_training_day = 2
 
+#12/31/2018 minus time_step
 end_training_year = 2018
 end_training_month = 12
-end_training_day = 31
+end_training_day = 13
 
 start_test_year = 2019
 start_test_month = 1
@@ -65,8 +66,12 @@ for stock in stocks:
 	adj_close[stock] = pd.read_csv("data3/{}.csv".format(stock)).drop(["High", "Low", "Volume","Open","Close"], axis=1)
 	adj_close_trend, adj_close_seasonal, adj_close_resid = stat_decompose.decompose(adj_close[stock])
 
+	F = adj_close[stock]
+	F = F["Adj Close"]
+	F_series = pd.Series(F)
+	y_test[stock] = list(F_series[len(F_series)-40:])
 
-	trend_lstm[stock] = list(np.concatenate(LSTM.lstm_decomp3(
+	trend_lstm[stock] = list(np.concatenate(new_LSTM.lstm_decomp3(
 		adj_close_trend,
 		time_step,
 		100, 
@@ -75,7 +80,7 @@ for stock in stocks:
 		start_test_date,
 		end_test_date)[-1]))
 
-	seasonal_lstm[stock] = list(np.concatenate(LSTM.lstm_decomp3(
+	seasonal_lstm[stock] = list(np.concatenate(new_LSTM.lstm_decomp3(
 		adj_close_seasonal,
 		time_step,
 		100, 
@@ -83,7 +88,7 @@ for stock in stocks:
 		end_training_date,
 		start_test_date,end_test_date)[-1]))
 
-	resid_lstm[stock] = list(np.concatenate(LSTM.lstm_decomp3(
+	resid_lstm[stock] = list(np.concatenate(new_LSTM.lstm_decomp3(
 		adj_close_resid,
 		time_step,
 		100, 
@@ -93,21 +98,21 @@ for stock in stocks:
 		end_test_date)[-1]))
 
 
-	trend_tcn[stock] = list(np.concatenate(TCN.tcn_decomp3(
+	trend_tcn[stock] = list(np.concatenate(new_TCN.tcn_decomp3(
 		adj_close_trend,
 		time_step, 
 		start_training_date,
 		end_training_date,
 		start_test_date,
 		end_test_date)[-1]))
-	seasonal_tcn[stock] = list(np.concatenate(TCN.tcn_decomp3(
+	seasonal_tcn[stock] = list(np.concatenate(new_TCN.tcn_decomp3(
 		adj_close_seasonal,
 		time_step, 
 		start_training_date,
 		end_training_date,
 		start_test_date,
 		end_test_date)[-1]))
-	resid_tcn[stock] = list(np.concatenate(TCN.tcn_decomp3(
+	resid_tcn[stock] = list(np.concatenate(new_TCN.tcn_decomp3(
 		adj_close_resid,
 		time_step, 
 		start_training_date,
@@ -115,20 +120,11 @@ for stock in stocks:
 		start_test_date,
 		end_test_date)[-1]))	
 		
-	F = adj_close[stock]
-	mask = (F['Date'] >= start_training_date) & (F['Date'] <= end_training_date)
-	training_size = int(len(F.loc[mask])) + 10 #moving average of 10
-	F = F["Adj Close"]
-	F_series = pd.Series(F)
-	y_test[stock] = list(F_series[training_size:len(F_series)])
-	
 
 
 
 
-
-
-with open('decomp3_results_pred40_days_2.csv','w', newline='') as file:
+with open('decomp3_results_pred40_days_2_new.csv','w', newline='') as file:
 	writer = csv.writer(file)
 	writer.writerow(["Stocks", "lstm_trend", "lstm_seasonal", "lstm_resid", "tcn_trend","tcn_seasonal","tcn_resid","y_test"])
 	for stock in stocks:

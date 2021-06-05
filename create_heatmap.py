@@ -15,11 +15,11 @@ stocks = ["AAPL", "IBM", "TSLA", "MSFT", "FB", "GOOGL", "PG", "JPM", "NFLX", "IN
 models = ["lll","llt","ltl","ltt","tll","tlt","ttl","ttt"]
 all_models = ["LSTM", "TCN", "LLL","LLT","LTL","LTT","TLL","TLT","TTL","TTT"]
 
-lstm_model = pd.read_csv("lstm_results_300_pred40_days_2.csv").set_index("Stocks")
-tcn_model = pd.read_csv("tcn_results_10_timestep_pred40_days_2.csv").set_index("Stocks")
+lstm_model = pd.read_csv("lstm_results_300_pred40_days_new.csv").set_index("Stocks")
+tcn_model = pd.read_csv("tcn_results_10_timestep_pred40_days_new.csv").set_index("Stocks")
 
-decomp_models_rmse = pd.read_csv("decomp3_results_pred40_days_RMSE_2.csv").set_index("Stocks")
-decomp_models_mae = pd.read_csv("decomp3_results_pred40_days_MAE_2.csv").set_index("Stocks")
+decomp_models_rmse = pd.read_csv("decomp3_results_pred40_days_RMSE_2_new.csv").set_index("Stocks")
+decomp_models_mae = pd.read_csv("decomp3_results_pred40_days_MAE_2_new.csv").set_index("Stocks")
 
 
 result = []
