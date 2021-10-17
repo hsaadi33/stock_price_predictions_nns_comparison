@@ -18,7 +18,7 @@ In this project there are 9 files:
 
 
 ## Report Abstract: 
-In this work, 16 stocks are considered to predict the adjusted closing price for the next 40 trading days. The methods that were used to make predictions are: Long Short Term Memory (LSTM), Temporal Convolution Networks (TCN), decomposing the signal and applying different combinations of LSTM and TCN on the decomposed parts, and stochastic process-geometric Brownian motion. The historical data from Yahoo Finance from 2015-2018 was used to build all the models. Finally, the output of each model is compared to the actual adjusted closing price of each stock. 
+In this work, 16 stocks are considered to predict the adjusted closing price for the next day for 40 trading days. The methods that were used to make predictions are: Long Short Term Memory (LSTM), Temporal Convolution Networks (TCN), decomposing the signal and applying different combinations of LSTM and TCN on the decomposed parts, and stochastic process-geometric Brownian motion. The historical data from Yahoo Finance from 2015-2018 was used to build all the models. Finally, the output of each model is compared to the actual adjusted closing price of each stock. 
 
 
 For bugs and questions, contact: saadi.cv4 at gmail.com

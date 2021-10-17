@@ -63,7 +63,7 @@
 	\date{}
 	\maketitle
 \begin{abstract}
-	In this work, $16$ stocks are considered to predict the adjusted closing price for the next $40$ trading days. The methods that were used to make predictions are: Long Short Term Memory (LSTM), Temporal Convolution Networks (TCN), decomposing the signal and applying different combinations of LSTM and TCN on the decomposed parts, and stochastic process-geometric Brownian motion. The historical data from Yahoo Finance from $2015$-$2018$ was used to build all the models. Finally, the output of each model is compared to the actual adjusted closing price of each stock. 
+	In this work, $16$ stocks are considered to predict the adjusted closing price for the next day for $40$ trading days. The methods that were used to make predictions are: Long Short Term Memory (LSTM), Temporal Convolution Networks (TCN), decomposing the signal and applying different combinations of LSTM and TCN on the decomposed parts, and stochastic process-geometric Brownian motion. The historical data from Yahoo Finance from $2015$-$2018$ was used to build all the models. Finally, the output of each model is compared to the actual adjusted closing price of each stock. 
 
 \end{abstract}
 
@@ -74,7 +74,7 @@ Stochastic modeling is an alternative method to model a system, and it's differe
 
 In this work, we didn't consider autoregressive models like ARIMA because the authors of this work \cite{siami2018comparison} showed the superiority of LSTMs in predicting the adjusted closing prices where the dataset was large. Moreover, the prediction period in our work is $40$ trading days which we considered to be not a small window of predictions, and we have $1000$ training points which is not a small dataset, so a neural network can have a chance to learn it. ARIMA can be a good model if the time series is stationary or can be made stationary. But if the time series cannot be made stationary trivially, then using ARIMA models becomes not ideal. Stationarity is not required for neural networks because they can learn non-linear relationships. \\
 
-To the the best of our knowledge, the literature does not contain a comparison study between LSTM, TCN, decomposed time series with LSTM and TCN, and GBM. We decided to perform these experiments on $16$ stocks, and predict the adjusted closing price for the next $40$ trading days in order to assess the performance of TCN and the decomposition idea. In this work, section $2$ has a short literature review and related work. In section $3$, has the methodology. In section $4$ is the experimental setup. In section $5$, the results of all the models. And finally, in section $6$ conclusion and future work.
+To the the best of our knowledge, the literature does not contain a comparison study between LSTM, TCN, decomposed time series with LSTM and TCN, and GBM. We decided to perform these experiments on $16$ stocks, and predict the adjusted closing price for the next day for $40$ trading days in order to assess the performance of TCN and the decomposition idea. In this work, section $2$ has a short literature review and related work. In section $3$, has the methodology. In section $4$ is the experimental setup. In section $5$, the results of all the models. And finally, in section $6$ conclusion and future work.
 
 \section{Short literature review and related work}
 
@@ -147,7 +147,7 @@ where we replaced $k$ with $t_{k}$, and $W_{k} = \sum_{i=1}^{k}z_{i}$.
 \section{Experimental Section}
 
 \subsection{Datasets}
- All experiments are performed on $16$ stocks from the S$\&$P $500$ list: Apple (AAPL), IBM (IBM), Tesla Inc. (TSLA), Microsoft Corp. (MSFT), Facebook (FB), Google Inc. (GOOGL), Procter $\&$ Gamble (PG), JPMorgan Chase $\&$ Co. (JPM), Netflix Inc. (NFLX), Intel Corp. (INTC), Adobe Inc. (ADBE), Johnson $\&$ Johnson (JNJ), Goldman Sachs Group (GS), Morgan Stanley (MS), (NDAQ), General Motors (GM). The historical data was taken from Yahoo Finance from $2015$-$2018$, and the goal is to predict the adjusted close price for the next $40$ trading days; i.e. the months of January and February of $2019$. 
+ All experiments are performed on $16$ stocks from the S$\&$P $500$ list: Apple (AAPL), IBM (IBM), Tesla Inc. (TSLA), Microsoft Corp. (MSFT), Facebook (FB), Google Inc. (GOOGL), Procter $\&$ Gamble (PG), JPMorgan Chase $\&$ Co. (JPM), Netflix Inc. (NFLX), Intel Corp. (INTC), Adobe Inc. (ADBE), Johnson $\&$ Johnson (JNJ), Goldman Sachs Group (GS), Morgan Stanley (MS), (NDAQ), General Motors (GM). The historical data was taken from Yahoo Finance from $2015$-$2018$, and the goal is to predict the adjusted close price for the next day for $40$ trading days; i.e. the months of January and February of $2019$. 
 
 \subsection{Evaluation Metrics}
 Two metrics are adopted in this study, $RMSE$ and $MAE$:
@@ -243,7 +243,7 @@ Moreover, we evaluated and plotted the logarithm of the standard deviation on th
 \end{figure}
 
 \section{Conclusion and Future Work}
-In this work, we compared multiple neural network architectures with and without decomposition and a simple GBM model. LSTM has the best results overall on $16$ stocks to predict the adjusted closing price for the next $40$ trading days. According to our results, additive decomposition did not give better results on average; however, it gave some significant results on a few stocks. As future work, one can investigate different methods to improve the performance of these results and study their generalization capabilities. This can be done through building ensembles of these models and using other ways of decomposing the time series such as singular spectrum analysis or STL.  Moreover, it would informative to investigate the relationship between time series properties and neural network architectures and decomposition methods.
+In this work, we compared multiple neural network architectures with and without decomposition and a simple GBM model. LSTM has the best results overall on $16$ stocks to predict the adjusted closing price for the next day for $40$ trading days. According to our results, additive decomposition did not give better results on average; however, it gave some significant results on a few stocks. As future work, one can investigate different methods to improve the performance of these results and study their generalization capabilities. This can be done through building ensembles of these models and using other ways of decomposing the time series such as singular spectrum analysis or STL.  Moreover, it would informative to investigate the relationship between time series properties and neural network architectures and decomposition methods.
 
 \bibliographystyle{IEEEtran}
 \bibliography{./references}
